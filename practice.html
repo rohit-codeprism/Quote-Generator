@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <title>Quote Generator</title>
+	  <link rel="icon" type="image/png" href="favicon.png">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/> 
+	
+	<style>
+	
+    .quote-container
+     {
+       width: auto;
+       max-width: 900px;
+       padding: 20px 30px;
+       border-radius: 10px;
+       background-color: rgba(255, 255, 255, 0.4);
+       box-shadow: 0 10px 10px 10px rgba(0, 0, 0, 0.2);
+	
+     }
+	 .quote-text 
+	 {
+      font-size: 3 rem;
+     }
+	 
+    .fa-quote-left 
+	{
+      font-size: 4rem;
+    }
+
+   .quote-auther
+    {
+     margin-top: 15px;
+     font-size: 2rem;
+     font-weight: 400;
+     font-style: italic;
+    }
+
+    .button-container 
+	{
+      margin-top: 15px;
+      display: flex;
+     justify-content: space-between;
+    }
+    </style>
+    </head>
+    <body>
+       <div class="quote-container" id="quote-container" >
+	   
+          <div class="quote-text">
+		      <i class="fas fa-quote-left"></i>
+			  <span id="quote"></span>
+		  </div>
+		  
+		  <div class="quote-auther">
+		   <span id="author"></span>
+		  </div>
+		  
+		   <div class="button-container">
+		   
+             <button class="twitter-button" id="twitter" title="Tweet This!">
+                <i class="fab fa-twitter"></i>
+              </button>
+			
+              <button id="new-quote">New Quote</button>
+            </div>
+            
+       </div>
+	   
+       <script >
+	   
+	      //Quote From API
+          async function getQuote()
+   		  {
+
+              const proxyUrl = 'https://agile-falls-34446.herokuapp.com/';
+              const apiUrl = 'https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json';
+              const response = await fetch(proxyUrl + apiUrl);
+              const data = await response.json();
+   
+              if (data.quoteAuthor === '') 
+		       {
+                   document.getElementById('author').innerText = 'Unknown';
+               } 
+		      else 
+		       {
+                  document.getElementById('author').innerText = data.quoteAuthor;
+               }
+   
+               document.getElementById('quote').innerText = data.quoteText;
+   
+          }
+		  
+		  // Tweet Quote
+           function tweetQuote()
+		   {
+           const quote = document.getElementById('quote').innerText;
+           const author = document.getElementById('author').innerText;
+           const twitterUrl = `https://twitter.com/intent/tweet?text=${quote} - ${author}`;
+           window.open(twitterUrl, '_blank');
+           }
+  
+          // Event Listeners
+            document.getElementById('new-quote').addEventListener('click', getQuote);
+            document.getElementById('twitter').addEventListener('click', tweetQuote);
+
+         // On Load
+            getQuote();
+	   
+	   
+	   </script>
+		 
+
+    </body>
+</html>
